@@ -11,6 +11,7 @@ datasetNames = ('Vimeo_90K_interp') #datasets.__all__
 parser = argparse.ArgumentParser(description='DAIN')
 
 parser.add_argument('--debug',action = 'store_true', help='Enable debug mode')
+parser.add_argument('--clear_dir', default= False, type = bool, help='clear folder where results live')
 parser.add_argument('--firstImage', default=None, help ='path to first image')
 parser.add_argument('--secondImage', default=None, help ='path to second image')
 parser.add_argument('--netName', type=str, default='DAIN',

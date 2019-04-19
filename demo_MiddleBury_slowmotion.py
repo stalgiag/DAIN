@@ -1,5 +1,6 @@
 import time
 import os
+import re
 from torch.autograd import Variable
 import torch
 import random
@@ -59,21 +60,31 @@ model = model.eval() # deploy mode
 use_cuda=args.use_cuda
 save_which=args.save_which
 dtype = args.dtype
-unique_id =str(random.randint(0, 100000))
+if args.uid:
+    unique_id=args.uid
+else:
+    unique_id =str(random.randint(0, 100000))
 print("The unique id for current testing is: " + str(unique_id))
 
 interp_error = AverageMeter()
 if DO_MiddleBurryOther:
     subdir = os.listdir(MB_Other_DATA)
     gen_dir = os.path.join(MB_Other_RESULT, unique_id)
-    os.mkdir(gen_dir)
+    if not os.path.exists(gen_dir):
+        os.mkdir(gen_dir)
 
     tot_timer = AverageMeter()
     proc_timer = AverageMeter()
     end = time.time()
     for dir in subdir: 
         print(dir)
-        os.mkdir(os.path.join(gen_dir, dir))
+        if not os.path.exists(os.path.join(gen_dir, dir)):
+            os.mkdir(os.path.join(gen_dir, dir))
+        else:
+            if args.clear_dir:
+                print("Clearing result directory!")
+                shutil.rmtree(os.path.join(gen_dir, dir))
+                os.mkdir(os.path.join(gen_dir, dir))
         if args.firstImage:
             arguments_strFirst = os.path.join(MB_Other_DATA, dir, args.firstImage)
         else:
@@ -177,8 +188,30 @@ if DO_MiddleBurryOther:
         # # copy the first and second reference frame
         # shutil.copy(arguments_strFirst, os.path.join(gen_dir, dir,  "frame10_i{:.3f}_11.png".format(0)))
         # shutil.copy(arguments_strSecond, os.path.join(gen_dir, dir,  "frame11_i{:.3f}_11.png".format(1)))
+        # dirname = gen_dir
 
-        count = 0
+        # list_of_files = []
+
+        # for file in dirname.visit(fil='*.png', bf=True):
+        #     list_of_files.append(file)
+
+        # largest = max(list_of_files)
+        # print (largest)
+        for root, dirs, files in os.walk(gen_dir):
+            # new subdir, so let's make a new...
+            list_of_files = []
+            for name in files:
+                if name.endswith((".png")):
+                    list_of_files.append(name)  # you originally appended the list of all names!
+            # once we're here, list_of_files has all the filenames in it,
+            # so we can find the largest and print it
+            if len(list_of_files) > 0:
+                temp = max(list_of_files)
+                largest = int(re.search(r'\d+', temp).group())
+            else:
+                largest = 0
+        print (str(largest) + " is the largest number. Starting generation there.")
+        count = largest
         shutil.copy(arguments_strFirst, os.path.join(gen_dir, dir, "{:0>4d}.png".format(count)))
         count  = count+1
         for item, time_offset in zip(y_, time_offsets):
