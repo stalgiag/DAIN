@@ -74,8 +74,14 @@ if DO_MiddleBurryOther:
     for dir in subdir: 
         print(dir)
         os.mkdir(os.path.join(gen_dir, dir))
-        arguments_strFirst = os.path.join(MB_Other_DATA, dir, "frame10.png")
-        arguments_strSecond = os.path.join(MB_Other_DATA, dir, "frame11.png")
+        if args.firstImage:
+            arguments_strFirst = os.path.join(MB_Other_DATA, dir, args.firstImage)
+        else:
+            arguments_strFirst = os.path.join(MB_Other_DATA, dir, "frame10.png")
+        if args.secondImage:
+            arguments_strSecond = os.path.join(MB_Other_DATA, dir, args.secondImage)
+        else:
+            arguments_strSecond = os.path.join(MB_Other_DATA, dir, "frame11.png")
         gt_path = os.path.join(MB_Other_GT, dir, "frame10i11.png")
 
         X0 =  torch.from_numpy( np.transpose(imread(arguments_strFirst) , (2,0,1)).astype("float32")/ 255.0).type(dtype)
