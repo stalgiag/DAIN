@@ -1,3 +1,5 @@
+This is a fork of [DAIN](https://github.com/baowenbo/DAIN) that has some modifications necessary to run inside of Google Colab. All credit goes to original authors and the original readme is below.
+
 # DAIN (Depth-Aware Video Frame Interpolation)
 [Project](https://sites.google.com/view/wenbobao/dain) **|** [Paper](http://arxiv.org/abs/1904.00830)
 
