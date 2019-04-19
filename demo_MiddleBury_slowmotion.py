@@ -186,17 +186,6 @@ if DO_MiddleBurryOther:
         #     imsave(arguments_strOut, np.round(item).astype(numpy.uint8))
         #
         # # copy the first and second reference frame
-        # shutil.copy(arguments_strFirst, os.path.join(gen_dir, dir,  "frame10_i{:.3f}_11.png".format(0)))
-        # shutil.copy(arguments_strSecond, os.path.join(gen_dir, dir,  "frame11_i{:.3f}_11.png".format(1)))
-        # dirname = gen_dir
-
-        # list_of_files = []
-
-        # for file in dirname.visit(fil='*.png', bf=True):
-        #     list_of_files.append(file)
-
-        # largest = max(list_of_files)
-        # print (largest)
         for root, dirs, files in os.walk(gen_dir):
             # new subdir, so let's make a new...
             list_of_files = []
